@@ -6,7 +6,7 @@ const autoprefixer = require('gulp-autoprefixer');
 const cleanCSS = require('gulp-clean-css');
 const uglify = require('gulp-uglify');
 const del = require('del');
-const browserSync = require('browser-sync').create();
+
 
 const sourcemaps = require('gulp-sourcemaps');
 const less = require('gulp-less');
@@ -20,8 +20,8 @@ const less = require('gulp-less');
 
 
 const cssFiles = [
-   './src/css/main.less',
-   './src/css/media.less'
+   './src/css/main.css',
+   './src/css/media.css'
 ];
 
 
@@ -51,8 +51,7 @@ function styles() {
    }))
    .pipe(sourcemaps.write('./'))
    //Выходная папка для стилей
-   .pipe(gulp.dest('./build/css'))
-   .pipe(browserSync.stream());
+   .pipe(gulp.dest('./build/css'));
 }
 
 //Таск на скрипты JS
@@ -67,8 +66,7 @@ function scripts() {
       toplevel: true
    }))
    //Выходная папка для скриптов
-   .pipe(gulp.dest('./build/js'))
-   .pipe(browserSync.stream());
+   .pipe(gulp.dest('./build/js'));
 }
 
 //Удалить всё в указанной папке
@@ -78,17 +76,10 @@ function clean() {
 
 //Просматривать файлы
 function watch() {
-   browserSync.init({
-      server: {
-          baseDir: "./"
-      }
-  });
   //Следить за CSS файлами
-  gulp.watch('./src/css/**/*.less', styles);
+  gulp.watch('./src/css/**/*.css', styles);
   //Следить за JS файлами
   gulp.watch('./src/js/**/*.js', scripts);
-  //При изменении HTML запустить синхронизацию
-  gulp.watch("./*.html").on('change', browserSync.reload);
 }
 
 //Таск вызывающий функцию styles
@@ -103,6 +94,9 @@ gulp.task('watch', watch);
 gulp.task('build', gulp.series(clean, gulp.parallel(styles,scripts)));
 //Таск запускает таск build и watch последовательно
 gulp.task('dev', gulp.series('build','watch'));
+
+
+//npm i - для установки node_modules
 
 
 //npm i gulp-sourcemaps gulp-less - для установки less перед началом работы
